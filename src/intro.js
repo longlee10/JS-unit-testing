@@ -27,3 +27,63 @@ export function factorial(number) {
 
   return factorial;
 }
+
+// More exercise
+// Reverse a string
+/* 
+  not a string -> Return message:  not a string
+  empty string -> Return message "cannot reverse an empty string"
+  string of length 1 -> Return the same
+  otherwise -> reverse
+*/
+export function reverseString(text) {
+  if (typeof text !== "string") return "Argument is not a string";
+
+  if (text === "") return "Cannot reverse an empty string";
+
+  let reversed = "";
+  for (let i = text.length - 1; i >= 0; i--) reversed += text[i];
+
+  return reversed;
+}
+
+// Find max in an array
+export function maxNum(numbers) {
+  if (!Array.isArray(numbers)) return "Not an array";
+
+  if (numbers.length === 0) return "No maximum number";
+
+  let max = numbers[0];
+  for (let i = 0; i <= numbers.length; i++)
+    if (numbers[i] > max) max = numbers[i];
+
+  return max;
+}
+/* 
+  not an array -> arg must be an array
+  empty array -> no max num in an empty array
+  array of 1 element -> return that only element
+  array of n element -> return the max
+ */
+
+// Check palindrome
+/* 
+  not a number -> NaN
+  a palindrome -> true
+  not a palindrome -> false
+*/
+export function isPalindrome(number) {
+  return typeof number !== "number" ? NaN : checkPalindrome(number);
+}
+
+function checkPalindrome(number) {
+  let strNum = number.toString();
+  let first = strNum.charAt(0);
+  let last = strNum.charAt(strNum.length - 1);
+
+  if (strNum.length <= 1) return true;
+
+  if (first === last)
+    return checkPalindrome(strNum.substring(1, strNum.length - 1));
+  return false;
+}
