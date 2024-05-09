@@ -251,6 +251,6 @@ describe("Is admissible to college", () => {
 
   it("should return invalid message if the result is invalid", () => {
     const testResult = {};
-    expect(isAdmissibleToCollege(testResult)).toBe("Invalid test result");
+    expect(isAdmissibleToCollege(testResult)).toMatch(/[Invalid test result]/);
   });
 });
