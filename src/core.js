@@ -1,25 +1,25 @@
 // Exercise: Writing good assertions
 export function getCoupons() {
   return [
-    { code: 'SAVE20NOW', discount: 0.2 },
-    { code: 'DISCOUNT50OFF', discount: 0.5 },
+    { code: "SAVE20NOW", discount: 0.2 },
+    { code: "DISCOUNT50OFF", discount: 0.5 },
   ];
 }
 
 // Lesson: Positive and negative testing
 export function calculateDiscount(price, discountCode) {
-  if (typeof price !== 'number' || price <= 0) {
-    return 'Invalid price';
+  if (typeof price !== "number" || price <= 0) {
+    return "Invalid price";
   }
 
-  if (typeof discountCode !== 'string') {
-    return 'Invalid discount code';
+  if (typeof discountCode !== "string") {
+    return "Invalid discount code";
   }
 
   let discount = 0;
-  if (discountCode === 'SAVE10') {
+  if (discountCode === "SAVE10") {
     discount = 0.1;
-  } else if (discountCode === 'SAVE20') {
+  } else if (discountCode === "SAVE20") {
     discount = 0.2;
   }
 
@@ -30,15 +30,15 @@ export function calculateDiscount(price, discountCode) {
 export function validateUserInput(username, age) {
   let errors = [];
 
-  if (typeof username !== 'string' || username.length < 3) {
-    errors.push('Invalid username');
+  if (typeof username !== "string" || username.length < 3) {
+    errors.push("Invalid username");
   }
 
-  if (typeof age !== 'number' || age < 18) {
-    errors.push('Invalid age');
+  if (typeof age !== "number" || age < 18) {
+    errors.push("Invalid age");
   }
 
-  return errors.length === 0 ? 'Validation successful' : errors.join(', ');
+  return errors.length === 0 ? "Validation successful" : errors.join(", ");
 }
 
 // Lesson: Boundary testing
@@ -51,6 +51,8 @@ export function isValidUsername(username) {
   const minLength = 5;
   const maxLength = 15;
 
+  if (!username) return false;
+
   return username.length >= minLength && username.length <= maxLength;
 }
 
@@ -61,8 +63,10 @@ export function canDrive(age, countryCode) {
     UK: 17,
   };
 
+  if (!age || !countryCode) return false;
+
   if (!legalDrivingAge[countryCode]) {
-    return 'Invalid country code';
+    return "Invalid country code";
   }
 
   return age >= legalDrivingAge[countryCode];
@@ -90,14 +94,14 @@ export class Stack {
 
   pop() {
     if (this.isEmpty()) {
-      throw new Error('Stack is empty');
+      throw new Error("Stack is empty");
     }
     return this.items.pop();
   }
 
   peek() {
     if (this.isEmpty()) {
-      throw new Error('Stack is empty');
+      throw new Error("Stack is empty");
     }
     return this.items[this.items.length - 1];
   }
@@ -120,16 +124,16 @@ export function createProduct(product) {
   if (!product.name)
     return {
       success: false,
-      error: { code: 'invalid_name', message: 'Name is missing' },
+      error: { code: "invalid_name", message: "Name is missing" },
     };
 
   if (product.price <= 0)
     return {
       success: false,
-      error: { code: 'invalid_price', message: 'Price is missing' },
+      error: { code: "invalid_price", message: "Price is missing" },
     };
 
-  return { success: true, message: 'Product was successfully published' };
+  return { success: true, message: "Product was successfully published" };
 }
 
 export function isStrongPassword(password) {
@@ -155,4 +159,40 @@ export function isStrongPassword(password) {
 
   // If all criteria are met, consider the password strong
   return true;
+}
+
+/* 
+  Return an array of objects 
+  Object has properties: name, voucher, type
+  voucher code of length 8, string, not empty
+  name string, not empty
+  type: string, only A and T, lenght only 1
+*/
+export function generateTestingInfo() {
+  return [
+    { name: "Student1", voucher: "H2J4W4I8", type: "A" },
+    { name: "Student2", voucher: "I3O9U0Q8", type: "T" },
+  ];
+}
+
+/* 
+  Rule: 
+  T: Admission -> Wait for email
+  A: Placement -> >=5 Essay && >= 245 Reading -> College level, otherwise foundation
+                  >=255 Math -> College level, otherwise foundation
+*/
+export function isAdmissibleToCollege(testResult) {
+  const { testType, subject, mathScore, essayScore, readingScore } = testResult;
+  if (testType === "T") return "You will receive an email within 2 weeks.";
+
+  if (subject === "Math")
+    return mathScore >= 255 ? "College level" : "Foundation level";
+
+  if (subject === "English") {
+    return essayScore >= 5 && readingScore >= 245
+      ? "College level"
+      : "Foundation level";
+  }
+
+  return "Invalid test result";
 }
