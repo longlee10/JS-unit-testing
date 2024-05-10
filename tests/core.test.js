@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   canDrive,
   createProduct,
+  fetchData,
   generateTestingInfo,
   getCoupons,
   isAdmissibleToCollege,
@@ -141,6 +142,18 @@ describe("Can drive", () => {
     expect(canDrive("18", "CA")).toMatch(/[Invalid code]/);
   });
 
+  // Parameterized test
+  it.each([
+    { age: 16, country: "UK", result: false },
+    { age: 17, country: "UK", result: true },
+    { age: 18, country: "UK", result: true },
+    { age: 15, country: "US", result: false },
+    { age: 16, country: "US", result: true },
+    { age: 17, country: "US", result: true },
+  ])("Should return $result for $age, $country", ({ age, country, result }) => {
+    expect(canDrive(age, country)).toBe(result);
+  });
+
   it("should return false if country code is UK but age is less than 17", () => {
     expect(canDrive("16", "UK")).toBe(false);
   });
@@ -190,6 +203,18 @@ describe("Price in range", () => {
     expect(isPriceInRange(undefined, min, max)).toBe(false);
     expect(isPriceInRange("", min, max)).toBe(false);
     expect(isPriceInRange("a", min, max)).toBe(false);
+  });
+});
+
+describe("Parameterized price in range", () => {
+  it.each([
+    { scenario: "price < min", price: 5, result: false },
+    { scenario: "price = min", price: 10, result: true },
+    { scenario: "price between min and max", price: 15, result: true },
+    { scenario: "price = max", price: 20, result: true },
+    { scenario: "price > max", price: 21, result: false },
+  ])("Should return $result when $scenario", ({ price, result }) => {
+    expect(isPriceInRange(price, 10, 20)).toBe(result);
   });
 });
 
@@ -252,5 +277,18 @@ describe("Is admissible to college", () => {
   it("should return invalid message if the result is invalid", () => {
     const testResult = {};
     expect(isAdmissibleToCollege(testResult)).toMatch(/[Invalid test result]/);
+  });
+});
+
+describe("Fetch data", () => {
+  it("should return a promise with an array of number", async () => {
+    try {
+      const result = await fetchData();
+      expect(Array.isArray(result)).toBe(true);
+      expect(result.length).toBeGreaterThan(0);
+    } catch (err) {
+      expect(err).toHaveProperty("reason");
+      expect(err.reason).toMatch(/fail/i);
+    }
   });
 });
